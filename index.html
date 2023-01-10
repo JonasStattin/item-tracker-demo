@@ -7,14 +7,31 @@
   <title>Document</title>
 </head>
 <body>
+  <form id="create-list">
+    <label for="create-list-name">Create listname</label>
+    <input id="create-list-name" type="text">
+    <button>Create</button>
+  </form>
+  <hr>
   <form id="list-search">
     <label for="list-name">Listname</label>
     <input id="list-name" type="text">
     <button>Search</button>
   </form>
   <ul id="lists"></ul>
+  <hr>
   <h2 id="listname"></h2>
   <ul id="item-list"></ul>
+  <hr>
+  <form id="add-item">
+    <label for="item-title">Title:</label>
+    <input id="item-title" type="text">
+    <br>
+    <label for="item-desc">Description:</label>
+    <textarea id="item-desc"></textarea>
+    <br>
+    <button>Save</button>
+  </form>
   <script src="main.js"></script>
 </body>
 </html>
