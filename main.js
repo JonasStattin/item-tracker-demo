@@ -1,4 +1,5 @@
-const API_BASE = 'https://nackademin-item-tracker.herokuapp.com/'
+// const API_BASE = 'https://nackademin-item-tracker.herokuapp.com/'
+const API_BASE = 'http://localhost:3000/'
 
 const createListForm = document.querySelector('#create-list')
 const createListNameField = document.querySelector('#create-list-name')
@@ -10,20 +11,42 @@ const listItemHolder = document.querySelector('#item-list')
 const addItemForm = document.querySelector('#add-item')
 const itemTitleField = document.querySelector('#item-title')
 const itemDescField = document.querySelector('#item-desc')
+const updateListForm = document.querySelector('#update-list')
 
 let currentList = ''
 
 function createItem(item) { 
   const liElem = document.createElement('li')
-  liElem.innerHTML = `<h4>${item.title}</h4><p>${item.description}</p>`
+  liElem.innerHTML = `<h4>${item.title}</h4><p>${item.description}${item.checked ? '✅' : ''}</p>`
+
   const deleteItemBtn = document.createElement('button')
   deleteItemBtn.innerText = 'Del'
   liElem.appendChild(deleteItemBtn)
+  
+  const setAsCheckedBtn = document.createElement('button')
+  setAsCheckedBtn.innerText = 'Check'
+  liElem.appendChild(setAsCheckedBtn)
+
   listItemHolder.appendChild(liElem)
 
   deleteItemBtn.addEventListener('click', async function () { 
     const res = await fetch(`${API_BASE}lists/${currentList}/items/${item._id}`, {
       method: 'DELETE'
+    })
+    const { list } = await res.json()
+
+    drawItems(list.itemList)
+  })
+
+  setAsCheckedBtn.addEventListener('click', async function () {
+    const res = await fetch(`${API_BASE}lists/${currentList}/items/${item._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        checked: true
+      })
     })
     const { list } = await res.json()
 
@@ -52,12 +75,32 @@ function drawLists(lists) {
 
     chooseListBtn.addEventListener('click', function () { 
       currentList = list._id
-      listnameOutput.innerText = list.listname
+      listnameOutput.value = list.listname
       drawItems(list.itemList)
-       listsHolder.innerHTML = ''
+      listsHolder.innerHTML = ''
     })
   })
 }
+
+updateListForm.addEventListener('submit', async function (e) {
+  e.preventDefault()
+
+  if (!currentList) { 
+    return alert('Choose a list')
+  }
+
+  const listname = listnameOutput.value
+  
+  await fetch(`${API_BASE}lists/${currentList}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      listname: listname
+    })
+  })
+})
 
 createListForm.addEventListener('submit', async function (e) { 
   e.preventDefault()
