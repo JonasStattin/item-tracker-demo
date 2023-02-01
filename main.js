@@ -1,5 +1,4 @@
-// const API_BASE = 'https://nackademin-item-tracker.herokuapp.com/'
-const API_BASE = 'http://localhost:3000/'
+const API_BASE = 'https://nackademin-item-tracker.herokuapp.com/'
 
 const createListForm = document.querySelector('#create-list')
 const createListNameField = document.querySelector('#create-list-name')
